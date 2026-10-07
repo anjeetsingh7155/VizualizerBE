@@ -17,6 +17,11 @@ const envSchema = z.object({
     .string()
     .regex(/^\d+[smhd]$/, 'must look like 15m, 12h or 7d')
     .default('7d'),
+  // Where uploaded and generated images are kept ("local" = a folder on this computer).
+  STORAGE_DRIVER: z.enum(['local']).default('local'),
+  UPLOAD_DIR: z.string().min(1).default('uploads'),
+  // Largest image accepted per file, in megabytes.
+  MAX_UPLOAD_MB: z.coerce.number().positive().max(50).default(10),
 });
 
 const parsed = envSchema.safeParse(process.env);

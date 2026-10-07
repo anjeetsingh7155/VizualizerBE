@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
+import { MulterError } from 'multer';
 import { AppError } from '../utils/errors';
 import { env } from '../config/env';
 
@@ -22,6 +23,19 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
       success: false,
       message: 'Please check the highlighted fields.',
       error: { code: 'VALIDATION_ERROR', fields },
+    });
+  }
+
+  if (err instanceof MulterError) {
+    const tooLarge = err.code === 'LIMIT_FILE_SIZE';
+    return res.status(tooLarge ? 413 : 400).json({
+      success: false,
+      message: tooLarge
+        ? `Each image must be ${env.MAX_UPLOAD_MB} MB or smaller.`
+        : err.code === 'LIMIT_UNEXPECTED_FILE' || err.code === 'LIMIT_FILE_COUNT'
+          ? 'Unexpected file in the upload. Please send only the texture and room images.'
+          : 'The upload could not be processed. Please try again.',
+      error: { code: tooLarge ? 'FILE_TOO_LARGE' : 'UPLOAD_ERROR' },
     });
   }
 
