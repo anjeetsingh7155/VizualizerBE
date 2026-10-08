@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Demo \u00b7 Statuario Marble",
+    "category": "marble",
+    "priceAmount": 450,
+    "priceUnit": "sq_ft",
+    "image": "s1-sample.jpg",
+    "thumbnail": "s1-thumb.jpg",
+    "rooms": {
+      "living_room_floor": "s1-living_room_floor.jpg",
+      "bedroom_floor": "s1-bedroom_floor.jpg",
+      "kitchen": "s1-kitchen.jpg",
+      "bathroom": "s1-bathroom.jpg",
+      "staircase": "s1-staircase.jpg",
+      "feature_wall": "s1-feature_wall.jpg"
+    }
+  },
+  {
+    "name": "Demo \u00b7 Black Galaxy Granite",
+    "category": "granite",
+    "priceAmount": 180,
+    "priceUnit": "sq_ft",
+    "image": "s2-sample.jpg",
+    "thumbnail": "s2-thumb.jpg",
+    "rooms": {
+      "living_room_floor": "s2-living_room_floor.jpg",
+      "bedroom_floor": "s2-bedroom_floor.jpg",
+      "kitchen": "s2-kitchen.jpg",
+      "bathroom": "s2-bathroom.jpg",
+      "staircase": "s2-staircase.jpg",
+      "feature_wall": "s2-feature_wall.jpg"
+    }
+  },
+  {
+    "name": "Demo \u00b7 Emperador Brown Marble",
+    "category": "marble",
+    "priceAmount": 320,
+    "priceUnit": "sq_ft",
+    "image": "s3-sample.jpg",
+    "thumbnail": "s3-thumb.jpg",
+    "rooms": {
+      "living_room_floor": "s3-living_room_floor.jpg",
+      "bedroom_floor": "s3-bedroom_floor.jpg",
+      "kitchen": "s3-kitchen.jpg",
+      "bathroom": "s3-bathroom.jpg",
+      "staircase": "s3-staircase.jpg",
+      "feature_wall": "s3-feature_wall.jpg"
+    }
+  },
+  {
+    "name": "Demo \u00b7 Teak Wood Planks",
+    "category": "wood",
+    "priceAmount": 260,
+    "priceUnit": "sq_ft",
+    "image": "s4-sample.jpg",
+    "thumbnail": "s4-thumb.jpg",
+    "rooms": {
+      "living_room_floor": "s4-living_room_floor.jpg",
+      "bedroom_floor": "s4-bedroom_floor.jpg",
+      "kitchen": "s4-kitchen.jpg",
+      "bathroom": "s4-bathroom.jpg",
+      "staircase": "s4-staircase.jpg",
+      "feature_wall": "s4-feature_wall.jpg"
+    }
+  }
+]

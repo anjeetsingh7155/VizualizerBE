@@ -9,8 +9,6 @@ const SUPPORTED = {
 
 type SupportedExtension = keyof typeof SUPPORTED;
 
-export const IMAGE_LIMITS = { minSide: 256, maxSide: 10000 } as const;
-
 export interface ValidatedImage {
   buffer: Buffer;
   extension: SupportedExtension;
@@ -21,7 +19,8 @@ export interface ValidatedImage {
 
 /**
  * Checks the actual file contents (not just the name or declared type):
- * it must really be a JPEG, PNG or WEBP image with sensible dimensions.
+ * it must really be a JPEG, PNG or WEBP image. There is no minimum or maximum picture size.
+ * (The website always converts photos to JPEG before uploading, so any photo works there.)
  */
 export function validateImageFile(
   file: Express.Multer.File | undefined,
@@ -47,15 +46,8 @@ export function validateImageFile(
   }
 
   const { width, height } = info;
-  if (!width || !height || Math.min(width, height) < IMAGE_LIMITS.minSide) {
-    throw new ValidationError(`${label} is too small.`, {
-      [field]: `Image must be at least ${IMAGE_LIMITS.minSide} pixels wide and tall.`,
-    });
-  }
-  if (Math.max(width, height) > IMAGE_LIMITS.maxSide) {
-    throw new ValidationError(`${label} is too large.`, {
-      [field]: `Image must be at most ${IMAGE_LIMITS.maxSide} pixels on its longest side.`,
-    });
+  if (!width || !height) {
+    throw new ValidationError(`${label} is not a valid image.`, { [field]: 'This file is not a valid image.' });
   }
 
   const ext = extension as SupportedExtension;

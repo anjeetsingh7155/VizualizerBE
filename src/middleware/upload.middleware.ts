@@ -26,6 +26,12 @@ const upload = multer({
   },
 });
 
+/** Accepts a texture sample for the library: the full image and a small preview (thumbnail). */
+export const textureImagesUpload = upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'thumbnail', maxCount: 1 },
+]);
+
 /** Accepts the two images of a visualization request: textureImage and roomImage. */
 export const generationImagesUpload = upload.fields([
   { name: 'textureImage', maxCount: 1 },

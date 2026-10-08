@@ -1,4 +1,4 @@
-import { mkdir, unlink, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import type { SaveFileInput, StorageProvider, StoredFile } from './storage.types';
@@ -19,6 +19,10 @@ export class LocalStorageProvider implements StorageProvider {
     await writeFile(filePath, buffer, { flag: 'wx' });
 
     return { key, url: `${LOCAL_PUBLIC_PREFIX}/${key}` };
+  }
+
+  async read(key: string): Promise<Buffer> {
+    return readFile(this.resolve(key));
   }
 
   async delete(key: string): Promise<void> {

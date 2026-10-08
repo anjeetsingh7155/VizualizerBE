@@ -22,6 +22,13 @@ const envSchema = z.object({
   UPLOAD_DIR: z.string().min(1).default('uploads'),
   // Largest image accepted per file, in megabytes.
   MAX_UPLOAD_MB: z.coerce.number().positive().max(50).default(10),
+  // fal.ai API key (from fal.ai → Dashboard → API Keys). Empty = image generation is switched off.
+  FAL_KEY: z.string().trim().default(''),
+  // The fal.ai image model used. Works with the Nano Banana family, e.g.
+  // fal-ai/nano-banana/edit (default), fal-ai/nano-banana-2/edit, fal-ai/nano-banana-pro/edit.
+  FAL_MODEL: z.string().trim().min(1).default('fal-ai/nano-banana/edit'),
+  // fal.ai's queue address. Only changed for testing.
+  FAL_QUEUE_URL: z.url().default('https://queue.fal.run'),
 });
 
 const parsed = envSchema.safeParse(process.env);

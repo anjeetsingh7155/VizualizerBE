@@ -15,6 +15,34 @@
       "when": 1791285317384,
       "tag": "0001_create_generations",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791374211048,
+      "tag": "0002_add_roles_and_textures",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791438081151,
+      "tag": "0003_remove_admin_and_hidden",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791440390496,
+      "tag": "0004_visualizations_with_six_images",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791447537631,
+      "tag": "0005_saved_visualizations",
+      "breakpoints": true
     }
   ]
 }

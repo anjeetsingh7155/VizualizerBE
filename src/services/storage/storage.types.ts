@@ -17,8 +17,10 @@ export interface StoredFile {
   url: string;
 }
 
-/** Any storage (local folder, S3, R2, Supabase, Cloudinary) must provide these two operations. */
+/** Any storage (local folder, S3, R2, Supabase, Cloudinary) must provide these operations. */
 export interface StorageProvider {
   save(input: SaveFileInput): Promise<StoredFile>;
+  /** Returns the file's contents (used to send a sample photo to the AI). */
+  read(key: string): Promise<Buffer>;
   delete(key: string): Promise<void>;
 }

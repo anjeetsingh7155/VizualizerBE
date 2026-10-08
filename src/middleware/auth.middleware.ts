@@ -18,3 +18,15 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction) {
   req.userId = userId;
   next();
 }
+
+/**
+ * For pages anyone can see (the gallery): if a valid sign-in is sent, remember who it is
+ * (to show which items they saved); otherwise continue as a guest. Never blocks the request.
+ */
+export function optionalAuth(req: Request, _res: Response, next: NextFunction) {
+  const header = req.headers.authorization;
+  const token = header?.startsWith('Bearer ') ? header.slice(7).trim() : null;
+  const userId = token ? verifyAccessToken(token) : null;
+  if (userId) req.userId = userId;
+  next();
+}
