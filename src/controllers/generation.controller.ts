@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express';
-import { createGenerationSchema, generationIdSchema, imageIdSchema } from '../validators/generation.validators';
+import { createGenerationSchema, generationIdSchema } from '../validators/generation.validators';
 import {
   createGeneration,
   deleteGeneration,
   getGeneration,
   listGenerations,
-  retryImage,
+  retryFailedImages,
   type GenerationDto,
 } from '../services/generation.service';
 import { toAbsoluteUrl } from '../utils/url';
@@ -44,8 +44,8 @@ export async function getOne(req: Request, res: Response) {
 }
 
 export async function retry(req: Request, res: Response) {
-  const { id, imageId } = imageIdSchema.parse(req.params);
-  const generation = await retryImage(userIdOf(req), id, imageId);
+  const { id } = generationIdSchema.parse(req.params);
+  const generation = await retryFailedImages(userIdOf(req), id);
   return sendSuccess(res, 202, 'Trying again', { generation: withAbsoluteUrls(req, generation) });
 }
 

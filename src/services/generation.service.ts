@@ -109,7 +109,13 @@ export async function getGeneration(userId: string, id: string): Promise<Generat
 
 // ---------------- Creating ----------------
 
-export async function createGeneration(userId: string, input: { textureId: string; prompt: string }) {
+export async function createGeneration(
+  userId: string,
+  input: { textureId: string; prompt: string; spaces?: SpaceType[] },
+) {
+  // The chosen spaces, always in the usual order (all six if none were sent).
+  const chosen = input.spaces?.length ? SPACE_ORDER.filter((s) => input.spaces!.includes(s)) : SPACE_ORDER;
+
   if (!isAiConfigured()) {
     throw new AppError(
       503,
@@ -148,7 +154,7 @@ export async function createGeneration(userId: string, input: { textureId: strin
         .returning();
       if (!generation) throw new Error('Generation insert returned no row');
       await tx.insert(generationImages).values(
-        SPACE_ORDER.map((space, position) => ({
+        chosen.map((space, position) => ({
           generationId: generation.id,
           space,
           position,
@@ -168,30 +174,34 @@ export async function createGeneration(userId: string, input: { textureId: strin
 }
 
 /** Retries one picture that failed. */
-export async function retryImage(userId: string, generationId: string, imageId: string) {
+/**
+ * "Try Again": creates every picture of this visualization that failed, all at once.
+ * Pictures that already worked are kept as they are.
+ */
+export async function retryFailedImages(userId: string, generationId: string) {
   if (!isAiConfigured()) {
     throw new AppError(503, 'AI_NOT_CONFIGURED', 'AI image generation is not set up yet (FAL_KEY is missing).');
   }
   const generation = await findOwned(userId, generationId);
-  const image = generation.images.find((img) => img.id === imageId);
-  if (!image) throw new NotFoundError('Picture not found.');
-  if (image.status !== 'failed') throw new ConflictError('This picture is not in a failed state.');
+  const failed = generation.images.filter((img) => img.status === 'failed');
+  if (failed.length === 0) throw new ConflictError('There are no failed pictures to create again.');
 
   // The original sample is needed to try again.
   const texture = generation.textureId
     ? await db.query.textures.findFirst({ where: eq(textures.id, generation.textureId) })
     : undefined;
   if (!texture) {
-    throw new AppError(410, 'SAMPLE_DELETED', 'The sample used for this visualization was deleted, so this picture cannot be created again.');
+    throw new AppError(410, 'SAMPLE_DELETED', 'The sample used for this visualization was deleted, so these pictures cannot be created again.');
   }
 
+  const ids = failed.map((img) => img.id);
   await db
     .update(generationImages)
     .set({ status: 'pending', errorMessage: null })
-    .where(eq(generationImages.id, image.id));
+    .where(inArray(generationImages.id, ids));
   await db.update(generations).set({ status: 'processing' }).where(eq(generations.id, generation.id));
 
-  void runImages(generation.id, texture.imageKey, [image.id]);
+  void runImages(generation.id, texture.imageKey, ids);
   return getGeneration(userId, generation.id);
 }
 

@@ -12,5 +12,5 @@ generationRouter.use(requireAuth);
 generationRouter.post('/', create);
 generationRouter.get('/', list);
 generationRouter.get('/:id', getOne);
-generationRouter.post('/:id/images/:imageId/retry', retry);
+generationRouter.post('/:id/retry', retry);
 generationRouter.delete('/:id', remove);
